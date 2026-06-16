@@ -12,6 +12,30 @@ class Tree {
     this.#root = this.#buildTree(array, 0, array.length - 1);
   }
 
+  inOrderForEach(callback, root = this.#root) {
+    if (root === null) return;
+
+    this.inOrderForEach(callback, root.left);
+    callback(root.data);
+    this.inOrderForEach(callback, root.right);
+  }
+
+  preOrderForEach(callback, root = this.#root) {
+    if (root === null) return;
+
+    callback(root.data);
+    this.preOrderForEach(callback, root.left);
+    this.preOrderForEach(callback, root.right);
+  }
+
+  postOrderForEach(callback, root = this.#root) {
+    if (root === null) return;
+
+    this.postOrderForEach(callback, root.left);
+    this.postOrderForEach(callback, root.right);
+    callback(root.data);
+  }
+
   #buildTree(array, start, end) {
     if (start > end) return null;
 
