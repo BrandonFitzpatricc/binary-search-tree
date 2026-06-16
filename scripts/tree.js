@@ -12,6 +12,16 @@ class Tree {
     this.#root = this.#buildTree(array, 0, array.length - 1);
   }
 
+  includes(value) {
+    let currentNode = this.#root;
+    while (currentNode !== null) {
+      if (currentNode.data === value) return true;
+      currentNode =
+        value < currentNode.data ? currentNode.left : currentNode.right;
+    }
+    return false;
+  }
+
   inOrderForEach(callback, root = this.#root) {
     if (root === null) return;
 
