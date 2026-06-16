@@ -12,10 +12,6 @@ class Tree {
     this.#root = this.#buildTree(array, 0, array.length - 1);
   }
 
-  get root() {
-    return this.#root;
-  }
-
   #buildTree(array, start, end) {
     if (start > end) return null;
 
@@ -28,15 +24,15 @@ class Tree {
     return root;
   }
 
-  prettyPrint(node, prefix = "", isLeft = true) {
-  if (node === null || node === undefined) {
-    return;
-  }
+  prettyPrint(prefix = "", isLeft = true, node = this.#root) {
+    if (node === null || node === undefined) {
+      return;
+    }
 
-  this.prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-  this.prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
-}
+    this.prettyPrint(`${prefix}${isLeft ? "│   " : "    "}`, false, node.right);
+    console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
+    this.prettyPrint(`${prefix}${isLeft ? "    " : "│   "}`, true, node.left);
+  }
 }
 
 export { Tree };
