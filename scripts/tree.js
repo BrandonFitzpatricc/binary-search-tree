@@ -198,6 +198,33 @@ class Tree {
     callback(root.data);
   }
 
+  height(value, root = undefined) {
+    // Initial setup - find the node corresponding to value before performing recursive calls.
+    if (root === undefined) {
+      root = this.#findNode(value);
+      if (root === null) return undefined;
+    }
+
+    if (root === null) return -1;
+
+    const leftSubtreeHeight = 1 + this.height(value, root.left);
+    const rightSubtreeHeight = 1 + this.height(value, root.right);
+
+    return leftSubtreeHeight > rightSubtreeHeight
+      ? leftSubtreeHeight
+      : rightSubtreeHeight;
+  }
+
+  #findNode(value) {
+    let currentNode = this.#root;
+    while (currentNode !== null) {
+      if (currentNode.data === value) return currentNode;
+      currentNode =
+        value < currentNode.data ? currentNode.left : currentNode.right;
+    }
+    return null;
+  }
+
   toSortedArray() {
     const sortedTree = [];
     this.inOrderForEach((value) => sortedTree.push(value));

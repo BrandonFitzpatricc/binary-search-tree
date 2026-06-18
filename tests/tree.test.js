@@ -182,3 +182,27 @@ describe("test depth first traversal methods", () => {
     tree.postOrderForEach((value) => console.log(value));
   });
 });
+
+describe("test height method", () => {
+  let tree;
+
+  beforeEach(() => {
+    tree = new Tree([5, 10, 15, 20, 25, 30, 35, 45]);
+  });
+
+  test("height of 35 is 1 in the tree created from [5, 10, 15, 20, 25, 30, 35, 45]", () => {
+    expect(tree.height(35)).toBe(1);
+  });
+
+  test("height of 30 is 2 in the tree created from [5, 10, 15, 20, 25, 30, 45]", () => {
+    expect(tree.height(30)).toBe(2);
+  });
+
+  test("height method returns undefined when the value is not found", () => {
+    expect(tree.height(40)).toBe(undefined);
+  });
+
+  test("height method returns undefined when called on an empty tree", () => {
+    expect(new Tree([]).height(5)).toBe(undefined);
+  });
+});
