@@ -47,7 +47,7 @@ class Tree {
           return;
         }
         currentNode = currentNode.left;
-      } else {
+      } else if (value > currentNode.data) {
         if (currentNode.right === null) {
           currentNode.right = new Node(value);
           return;
@@ -55,6 +55,111 @@ class Tree {
         currentNode = currentNode.right;
       }
     }
+  }
+
+  deleteItem(value) {
+    let deletedNodeParent;
+    let deletedNode;
+    let rootBeingDeleted;
+
+    //Find the node to be deleted and its parent
+    let currentNode = this.#root;
+    while (true) {
+      if (value === currentNode.data) {
+        rootBeingDeleted = true;
+        deletedNode = currentNode;
+        break;
+      }
+
+      if (value < currentNode.data) {
+        if (currentNode.left === null) return;
+
+        if (currentNode.left.data === value) {
+          deletedNodeParent = currentNode;
+          deletedNode = currentNode.left;
+          break;
+        }
+        currentNode = currentNode.left;
+      } else if (value > currentNode.data) {
+        if (currentNode.right === null) return;
+
+        if (currentNode.right.data === value) {
+          deletedNodeParent = currentNode;
+          deletedNode = currentNode.right;
+          break;
+        }
+        currentNode = currentNode.right;
+      }
+    }
+
+    // Case 1: deletedNode has no children
+    if (deletedNode.left === null && deletedNode.right === null) {
+      if (rootBeingDeleted) {
+        this.#root = null;
+        return;
+      }
+
+      if (value < deletedNodeParent.data) {
+        deletedNodeParent.left = null;
+      } else if (value > deletedNodeParent.data) {
+        deletedNodeParent.right = null;
+      }
+
+      // Case 2: deletedNode has one child
+    } else if ((deletedNode.left !== null) !== (deletedNode.right !== null)) {
+      if (rootBeingDeleted) {
+        this.#root =
+          deletedNode.left !== null ? deletedNode.left : deletedNode.right;
+        return;
+      }
+
+      if (value < deletedNodeParent.data) {
+        deletedNodeParent.left =
+          deletedNode.left !== null ? deletedNode.left : deletedNode.right;
+      } else if (value < deletedNodeParent.data) {
+        deletedNodeParent.right =
+          deletedNode.left !== null ? deletedNode.left : deletedNode.right;
+      }
+
+      // Case 3: deletedNode has two children
+    } else if (deletedNode.left !== null && deletedNode.right !== null) {
+      const successor = this.#getSuccessor(deletedNode);
+      const successorParent = this.#getSuccessorParent(deletedNode);
+
+      if (rootBeingDeleted) {
+        this.#root = successor;
+      } else if (value < deletedNodeParent.data) {
+        deletedNodeParent.left = successor;
+      } else if (value > deletedNodeParent.data) {
+        deletedNodeParent.right = successor;
+      }
+
+      successor.left = deletedNode.left !== successor ? deletedNode.left : null;
+      successor.right =
+        deletedNode.right !== successor ? deletedNode.right : null;
+
+      if (successorParent !== deletedNode) successorParent.right = null;
+    }
+  }
+
+  // Successor is the rightmost node of the left subtree of deletedNode
+  #getSuccessor(deletedNode) {
+    let currentNode = deletedNode.left;
+    while (currentNode.right !== null) {
+      currentNode = currentNode.right;
+    }
+    return currentNode;
+  }
+
+  #getSuccessorParent(deletedNode) {
+    if (deletedNode.left.right === null) return deletedNode;
+
+    let currentNode = deletedNode.left;
+    while (currentNode.right !== null) {
+      if (currentNode.right.right === null) break;
+      currentNode = currentNode.right;
+    }
+    return currentNode;
   }
 
   inOrderForEach(callback, root = this.#root) {
@@ -79,6 +184,12 @@ class Tree {
     this.postOrderForEach(callback, root.left);
     this.postOrderForEach(callback, root.right);
     callback(root.data);
+  }
+
+  toSortedArray() {
+    const sortedTree = [];
+    this.inOrderForEach((value) => sortedTree.push(value));
+    return sortedTree;
   }
 
   prettyPrint(prefix = "", isLeft = true, node = this.#root) {

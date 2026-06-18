@@ -35,12 +35,12 @@ describe("test insert method", () => {
     tree.insert(0);
     const sortedTree = [];
     tree.inOrderForEach((value) => sortedTree.push(value));
-    expect(sortTree(tree)).toEqual([0, 1, 5, 9, 14, 23, 27]);
+    expect(tree.toSortedArray()).toEqual([0, 1, 5, 9, 14, 23, 27]);
   });
 
   test("18 is successfully inserted into a tree with values 14, 9, 27, 1, 23, 5", () => {
     tree.insert(18);
-    expect(sortTree(tree)).toEqual([1, 5, 9, 14, 18, 23, 27]);
+    expect(tree.toSortedArray()).toEqual([1, 5, 9, 14, 18, 23, 27]);
   });
 
   test("multiple values are successfully inserted into a populated tree", () => {
@@ -50,28 +50,86 @@ describe("test insert method", () => {
     tree.insert(20);
     tree.insert(0);
 
-    expect(sortTree(tree)).toEqual([0, 1, 5, 6, 9, 10, 14, 15, 20, 23, 27]);
+    expect(tree.toSortedArray()).toEqual([
+      0, 1, 5, 6, 9, 10, 14, 15, 20, 23, 27,
+    ]);
   });
 
   test("duplicate values are not inserted into a tree", () => {
     tree.insert(5);
 
-    expect(sortTree(tree)).toEqual([1, 5, 9, 14, 23, 27]);
+    expect(tree.toSortedArray()).toEqual([1, 5, 9, 14, 23, 27]);
   });
 
   test("values are successfully inserted into an empty tree", () => {
-    const emptyTree = new Tree([]);
+    const tree = new Tree([]);
 
-    emptyTree.insert(2);
-    emptyTree.insert(1);
-    emptyTree.insert(3);
+    tree.insert(2);
+    tree.insert(1);
+    tree.insert(3);
 
-    expect(sortTree(emptyTree)).toEqual([1, 2, 3]);
+    expect(tree.toSortedArray()).toEqual([1, 2, 3]);
   });
 });
 
-function sortTree(tree) {
-  const sortedTree = [];
-  tree.inOrderForEach((value) => sortedTree.push(value));
-  return sortedTree;
-}
+describe("test deleteItem method", () => {
+  let tree;
+
+  beforeEach(() => {
+    tree = new Tree([20, 30, 40, 50, 60, 70]);
+  });
+
+  test("items with no children are successfully deleted", () => {
+    tree.deleteItem(30);
+    tree.deleteItem(50);
+    expect(tree.toSortedArray()).toEqual([20, 40, 60, 70]);
+  });
+
+  test("items with one child are successfully deleted", () => {
+    tree.deleteItem(20);
+    expect(tree.toSortedArray()).toEqual([30, 40, 50, 60, 70]);
+  });
+
+  test("items with two children are successfully deleted", () => {
+    tree.deleteItem(60);
+    expect(tree.toSortedArray()).toEqual([20, 30, 40, 50, 70]);
+  });
+
+  test("root is successfully deleted when it has no children", () => {
+    const tree = new Tree([5]);
+    tree.deleteItem(5);
+    expect(tree.toSortedArray()).toEqual([]);
+  });
+
+  test("root is successfully deleted when it has one child", () => {
+    const tree = new Tree([5, 10]);
+    tree.deleteItem(5);
+    expect(tree.toSortedArray()).toEqual([10]);
+  });
+
+  test("root is successfully deleted when it has two children", () => {
+    tree.deleteItem(40);
+    expect(tree.toSortedArray()).toEqual([20, 30, 50, 60, 70]);
+  });
+
+  test("a node in the middle of a long tree is successfully deleted", () => {
+    const tree = new Tree([
+      20, 30, 40, 50, 60, 70, 90, 110, 130, 150, 170, 190, 210, 230, 250,
+    ]);
+    tree.deleteItem(190);
+    expect(tree.toSortedArray()).toEqual([
+      20, 30, 40, 50, 60, 70, 90, 110, 130, 150, 170, 210, 230, 250,
+    ]);
+  });
+
+  test("root is successfully deleted from a tree with three nodes", () => {
+    const tree = new Tree([10, 20, 30]);
+    tree.deleteItem(20);
+    expect(tree.toSortedArray()).toEqual([10, 30]);
+  });
+
+  test("deleteItem method does not break if the value is not found", () => {
+    tree.deleteItem(90);
+    expect(tree.toSortedArray()).toEqual([20, 30, 40, 50, 60, 70]);
+  });
+});
