@@ -62,6 +62,8 @@ class Tree {
     let deletedNode;
     let rootBeingDeleted;
 
+    if (this.#root === null) return;
+
     //Find the node to be deleted and its parent
     let currentNode = this.#root;
     while (true) {
@@ -160,6 +162,16 @@ class Tree {
       currentNode = currentNode.right;
     }
     return currentNode;
+  }
+
+  levelOrderForEach(callback) {
+    const queue = this.#root !== null ? [this.#root] : [];
+    while (queue.length > 0) {
+      const currentNode = queue.shift();
+      callback(currentNode.data);
+      if (currentNode.left !== null) queue.push(currentNode.left);
+      if (currentNode.right !== null) queue.push(currentNode.right);
+    }
   }
 
   inOrderForEach(callback, root = this.#root) {

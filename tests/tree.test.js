@@ -132,4 +132,53 @@ describe("test deleteItem method", () => {
     tree.deleteItem(90);
     expect(tree.toSortedArray()).toEqual([20, 30, 40, 50, 60, 70]);
   });
+
+  test("deleteItem method does not break if used on an empty tree", () => {
+    const tree = new Tree([]);
+    tree.deleteItem(5);
+    expect(tree.toSortedArray()).toEqual([]);
+  });
+});
+
+describe("test levelOrderForEach method", () => {
+  test("a populated tree is successfully traversed in level-first order", () => {
+    const tree = new Tree([20, 30, 40, 50, 60, 70, 80]);
+    const array = [];
+    tree.levelOrderForEach((value) => array.push(value));
+    expect(array).toEqual([50, 30, 70, 20, 40, 60, 80]);
+  });
+
+  test("levelOrderForEach method does not break if used on an empty tree", () => {
+    const tree = new Tree([]);
+    const array = [];
+    tree.levelOrderForEach((value) => array.push(value));
+    expect(array).toEqual([]);
+  });
+});
+
+describe("test depth first traversal methods", () => {
+  let tree;
+
+  beforeEach(() => {
+    tree = new Tree([20, 30, 40, 50, 60, 70, 80]);
+  });
+
+  test("a populated tree is successfully traversed in pre order", () => {
+    const array = [];
+    tree.preOrderForEach((value) => array.push(value));
+    expect(array).toEqual([50, 30, 20, 40, 70, 60, 80]);
+  });
+
+  test("a populated tree is successfully traversed in post order", () => {
+    const array = [];
+    tree.postOrderForEach((value) => array.push(value));
+    expect(array).toEqual([20, 40, 30, 60, 80, 70, 50]);
+  });
+
+  test("no depth first traversal method breaks if used on an empty tree", () => {
+    const tree = new Tree([]);
+    tree.inOrderForEach((value) => console.log(value));
+    tree.preOrderForEach((value) => console.log(value));
+    tree.postOrderForEach((value) => console.log(value));
+  });
 });
