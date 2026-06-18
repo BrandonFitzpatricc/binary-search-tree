@@ -215,6 +215,19 @@ class Tree {
       : rightSubtreeHeight;
   }
 
+  depth(value) {
+    let currentNode = this.#root;
+    let currentLevel = 0;
+    while (currentNode !== null) {
+      if (currentNode.data === value) break;
+
+      currentNode =
+        value < currentNode.data ? currentNode.left : currentNode.right;
+      currentLevel++;
+    }
+    return currentNode !== null ? currentLevel : undefined;
+  }
+
   #findNode(value) {
     let currentNode = this.#root;
     while (currentNode !== null) {

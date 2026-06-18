@@ -194,8 +194,12 @@ describe("test height method", () => {
     expect(tree.height(35)).toBe(1);
   });
 
-  test("height of 30 is 2 in the tree created from [5, 10, 15, 20, 25, 30, 45]", () => {
+  test("height of 30 is 2 in the tree created from [5, 10, 15, 20, 25, 30, 35, 45]", () => {
     expect(tree.height(30)).toBe(2);
+  });
+
+  test("height of the root node is 3 in the tree created from [5, 10, 25, 20, 25, 30, 35, 45]", () => {
+    expect(tree.height(20)).toBe(3);
   });
 
   test("height method returns undefined when the value is not found", () => {
@@ -204,5 +208,33 @@ describe("test height method", () => {
 
   test("height method returns undefined when called on an empty tree", () => {
     expect(new Tree([]).height(5)).toBe(undefined);
+  });
+});
+
+describe("test depth method", () => {
+  let tree;
+
+  beforeEach(() => {
+    tree = new Tree([5, 10, 15, 20, 25, 30, 35, 45]);
+  });
+
+  test("depth of 35 is 2 in the tree created from [5, 10, 15, 20, 25, 30, 35, 45", () => {
+    expect(tree.depth(35)).toBe(2);
+  });
+
+  test("depth of 30 is 1 in the tree created from [5, 10, 15, 20, 25, 30, 35, 45]", () => {
+    expect(tree.depth(30)).toBe(1);
+  });
+
+  test("depth of the root node is 0 in the tree created from [5, 10, 15, 20, 25, 30, 35, 45]", () => {
+    expect(tree.depth(20)).toBe(0);
+  });
+
+  test("depth method returns undefined when the value is not found", () => {
+    expect(tree.depth(40)).toBe(undefined);
+  });
+
+  test("depth method returns undefined when called on an empty tree", () => {
+    expect(new Tree([]).depth(5)).toBe(undefined);
   });
 });
