@@ -228,6 +228,20 @@ class Tree {
     return currentNode !== null ? currentLevel : undefined;
   }
 
+  isBalanced(root = this.#root) {
+    if (root === null) return true;
+
+    if (!this.isBalanced(root.left) || !this.isBalanced(root.right)) {
+      return false;
+    }
+
+    const leftSubtreeHeight = this.height(undefined, root.left);
+    const rightSubtreeHeight = this.height(undefined, root.right);
+
+    const heightDifference = Math.abs(leftSubtreeHeight - rightSubtreeHeight);
+    return heightDifference <= 1;
+  }
+
   #findNode(value) {
     let currentNode = this.#root;
     while (currentNode !== null) {

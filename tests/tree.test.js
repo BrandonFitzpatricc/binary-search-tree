@@ -238,3 +238,49 @@ describe("test depth method", () => {
     expect(new Tree([]).depth(5)).toBe(undefined);
   });
 });
+
+describe("test isBalanced method", () => {
+  test("the tree created from [20, 30, 40, 50, 60, 70, 80] is balanced", () => {
+    const tree = new Tree([20, 30, 40, 50, 60, 70, 80]);
+    expect(tree.isBalanced()).toBe(true);
+  });
+
+  test("adding 90 to the above tree keeps it balanced", () => {
+    const tree = new Tree([20, 30, 40, 50, 60, 70, 80]);
+    tree.insert(90);
+    expect(tree.isBalanced()).toBe(true);
+  });
+
+  test("adding 100 to the above tree makes it unbalanced", () => {
+    const tree = new Tree([20, 30, 40, 50, 60, 70, 80, 90]);
+    tree.insert(100);
+    expect(tree.isBalanced()).toBe(false);
+  });
+
+  test("adding 4, 3, 2, 1, 6, 7, 8, 9 to a tree with a root of 5 makes it unbalanced", () => {
+    const tree = new Tree([5]);
+    tree.insert(4);
+    tree.insert(3);
+    tree.insert(2);
+    tree.insert(1);
+    tree.insert(6);
+    tree.insert(7);
+    tree.insert(8);
+    tree.insert(9);
+    expect(tree.isBalanced()).toBe(false);
+  });
+
+  test("the tree created from adding 1-5 one by one is not balanced", () => {
+    const tree = new Tree([]);
+    tree.insert(1);
+    tree.insert(2);
+    tree.insert(3);
+    tree.insert(4);
+    tree.insert(5);
+    expect(tree.isBalanced()).toBe(false);
+  });
+
+  test("an empty tree is balanced", () => {
+    expect(new Tree().isBalanced()).toBe(true);
+  });
+});
