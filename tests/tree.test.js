@@ -284,3 +284,36 @@ describe("test isBalanced method", () => {
     expect(new Tree().isBalanced()).toBe(true);
   });
 });
+
+describe("test rebalance method", () => {
+  test("rebalance balances an unbalanced tree of values 1-5", () => {
+    const tree = new Tree([]);
+    tree.insert(1);
+    tree.insert(2);
+    tree.insert(3);
+    tree.insert(4);
+    tree.insert(5);
+    tree.rebalance();
+    expect(tree.isBalanced()).toBe(true);
+  });
+
+  test("rebalance balances an unbalanced tree of values 1-9", () => {
+    const tree = new Tree([5]);
+    tree.insert(4);
+    tree.insert(3);
+    tree.insert(2);
+    tree.insert(1);
+    tree.insert(6);
+    tree.insert(7);
+    tree.insert(8);
+    tree.insert(9);
+    tree.rebalance();
+    expect(tree.isBalanced()).toBe(true);
+  });
+
+  test("rebalance does not break when used on an empty tree", () => {
+    const tree = new Tree([]);
+    tree.rebalance();
+    expect(tree.isBalanced()).toBe(true);
+  });
+});

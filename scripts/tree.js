@@ -242,6 +242,13 @@ class Tree {
     return heightDifference <= 1;
   }
 
+  rebalance() {
+    if (this.isBalanced()) return;
+
+    const sortedArray = this.toSortedArray();
+    this.#root = this.#buildTree(sortedArray, 0, sortedArray.length - 1);
+  }
+
   #findNode(value) {
     let currentNode = this.#root;
     while (currentNode !== null) {
